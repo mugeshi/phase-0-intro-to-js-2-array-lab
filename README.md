@@ -1,61 +1,109 @@
-# Arrays Lab
+# JSON Server Template
 
-## Learning Goals
+## Setup
 
-- Practice writing arrays
-- Practice using _destructive_ methods to manipulate arrays
-- Practice using _nondestructive_ methods to manipulate arrays
+Fork and clone this repo. Then install the dependencies by running:
 
-## Introduction
-
-We've learned about how arrays work and about the array methods built in to
-JavaScript that we can use to manipulate them. Now it's time to practice what
-we've learned.
-
-If you haven't already, fork and clone this lab into your local environment.
-Navigate into its directory in the terminal, then run `code .` to open the files
-in Visual Studio Code.
-
-## Instructions
-
-Open up the `test` folder and take a look at `indexTest.js`. Note that some of
-the names of the functions you will be writing begin with `destructively` and
-some don't. This is a clue as to which `Array` method you will need to use for
-each function.
-
-Note also that the first test asks for an array called `cats`, set to an
-initial value of `["Milo", "Otis", "Garfield"]`. In your functions, you will be
-accessing and manipulating this array.
-
-Near the top of `indexTest.js` you will see the following:
-
-```js
-beforeEach(function () {
-  cats.length = 0;
-
-  cats.push("Milo", "Otis", "Garfield");
-});
+```sh
+npm install
 ```
 
-What this code does is _reset_ the array to its original contents before each
-test is run. The reason we need to do this is because some of your functions
-will be _destructive_ — they will change the original `cats` array. This
-is a problem because it means the input to the remaining functions will be
-dependent on the outcome of other functions. It also means that the expected
-return value of a function might change if the tests are run in a different
-order. This makes it more difficult both to write tests in the first place and
-to figure out how to get the tests to pass. Resetting the array returns us to a
-blank slate between tests.
+## Seeding Data
 
-This is also a good illustration of why it's generally good practice to avoid
-mutating a program's state whenever possible. If we use only _nondestructive_
-methods, we have complete control over what's going into and coming out of the
-function. This makes our programs more robust, easier to maintain, and less
-prone to bugs.
+To set up your database, update the `db/seeds.json` file to contain an object
+with a key pointing to an array of data, like this:
 
-Remember the workflow:
+```json
+{
+  "toys": [
+    {
+      "id": 1,
+      "name": "Woody",
+      "image": "http://www.pngmart.com/files/3/Toy-Story-Woody-PNG-Photos.png",
+      "likes": 8
+    },
+    {
+      "id": 2,
+      "name": "Buzz Lightyear",
+      "image": "http://www.pngmart.com/files/6/Buzz-Lightyear-PNG-Transparent-Picture.png",
+      "likes": 14
+    }
+  ]
+}
+```
 
-1. Run the tests using `learn test`.
-2. Read the errors; vocalize what they're asking you to do.
-3. Write code; repeat steps 1 and 2 often until a test passes.
-4. Repeat as needed for the remaining tests.
+Then, run `npm run seed` to copy data from the `db/seeds.json` file to the
+`db/db.json` file. `json-server` uses the `db.json` file to create your RESTful
+API, so make sure your `db.json` file is always up to date!
+
+Any time you want to reset your database back to your original data, run
+`npm run seed` again. Doing this will overwrite all the data in your `db.json`
+file, so make sure you don't have any data in that file that you don't mind
+losing!
+
+## Running the Server Locally
+
+To run your server in development mode, run:
+
+```sh
+npm run dev
+```
+
+While running in development mode, the server will re-load any time you make
+changes to the `db.json` file, so you can test our your seed data.
+
+While your server is running, you can make requests to
+[http://localhost:3000](http://localhost:3000). Check it out in the browser to
+make sure your server works!
+
+## Deploying
+
+Free services like Render make it simple to deploy your Node server. Render also
+works nicely with Rails, which you'll learn later in the program.
+
+### Sign Up for a Render Account
+
+You can sign up for a free account at
+[https://dashboard.render.com/register][Render signup]. We recommend that you
+sign up using GitHub as that will make it a little easier for you to connect
+Render to your GitHub account. The instructions below assume you've done that.
+
+[Render signup]: https://dashboard.render.com/register
+
+Once you've completed the signup process, you will be taken to the Render
+dashboard.
+
+In order to connect Render to your GitHub account, you'll need to click the "New
+Web Service" button in the "Web Services" box. On the next page, you will see a
+GitHub heading on the right side and below that a link labeled "Configure
+account". (If you didn't sign up using GitHub, it will say "Connect account"
+instead.) Click that link; a modal will appear asking you for permission to
+install Render on your GitHub account. Click "Install." You should then be taken
+back to the "Create a New Web Service" page, which should now show a list of
+your GitHub repos.
+
+### Deploy the Server
+
+Find the GitHub repo for your json server in the list and click Connect. Give
+the web service a name and make sure the Environment is set to Node. Everything
+else can be left as is. Scroll down to the bottom of the page and click "Create
+Web Service." The build process will begin automatically.
+
+The URL for your deployed server is shown in the upper left corner of the page,
+e.g., `https://my-server.onrender.com`. Once the build is complete, you will be able to
+make fetch requests to that URL.
+
+### Making Updates
+
+Since Render deployment integrates with your GitHub repo, you can easily deploy
+changes to your database. First, commit and push your code up to GitHub:
+
+```sh
+git add .
+git commit -m "Updated database"
+git push
+```
+
+Then launch the build process by going to the page for your server on the
+Render dashboard, clicking the "Manual Deploy" button in the upper right corner
+of the page, and selecting "Deploy latest commit."
